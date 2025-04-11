@@ -1,28 +1,30 @@
 #!/bin/bash
 
+#Avisar a l'usuari
+echo "Aquest script necessita ser executar amb 'SUDO'."
+
 # Preguntar a l'usuari
-read -p "Introdueix la ruta del fitxer o carpeta que vols guardar: " TARGET
-read -p "Introdueix la data d'obertura (format: YYYY-MM-DD HH:MM): " OPEN_DATE
+read -p "Introdueix la ruta del fitxer o carpeta que vols guardar: " ARXIUS
+read -p "Introdueix la data d'obertura (format: YYYY-MM-DD HH:MM): " DATA_OBERTURA
 read -p "Introdueix un títol per a la pàgina web: " TITLE
 
 # Preparar variables
-BASENAME=$(basename "$TARGET")
-TIMESTAMP=$(date -d "$OPEN_DATE" +%s)
+BASENAME=$(basename "$ARXIUS")
+TIMESTAMP=$(date -d "$DATA_OBERTURA" +%s)
 NOW=$(date +%s)
 SECONDS_LEFT=$((TIMESTAMP - NOW))
 ARCHIVE="capsula.tar.gz"
 WEB_DIR="/var/www/html"
-DOWNLOAD_SCRIPT="/tmp/unlock_capsula.sh"
 
 # Comprimir el contingut
-tar -czf "$ARCHIVE" "$TARGET"
+tar -czf "$ARCHIVE" "$ARXIUS"
 
 # Moure l’arxiu i bloquejar-lo
 sudo mv "$ARCHIVE" "$WEB_DIR/"
 sudo chmod 000 "$WEB_DIR/$ARCHIVE"
 
 #Obertura
-comanda_obertura=$(chmod 777 $WEB_DIR/$ARCHIVE)
+COMANDA_OBERTURA=$(chmod 777 $WEB_DIR/$ARCHIVE)
 
 # Instal·lació AT si no esta instal·lat
 if ! command -v at &> /dev/null; then
@@ -34,7 +36,7 @@ if ! command -v at &> /dev/null; then
 fi
 
 # Programar obertura amb `at`
-sudo echo "$comanda_obertura" | sudo at "$OPEN_DATE"
+sudo echo "$COMANDA_OBERTURA" | sudo at "$DATA_OBERTURA"
 
 # Crear pàgina HTML amb compte enrere
 cat <<EOF | sudo tee "$WEB_DIR/index.html" > /dev/null
@@ -52,11 +54,11 @@ cat <<EOF | sudo tee "$WEB_DIR/index.html" > /dev/null
     </div>
 
     <script>
-        const targetDate = new Date("$OPEN_DATE").getTime();
+        const ARXIUSDate = new Date("$DATA_OBERTURA").getTime();
 
         const interval = setInterval(() => {
             const now = new Date().getTime();
-            const distance = targetDate - now;
+            const distance = ARXIUSDate - now;
 
             if (distance <= 0) {
                 clearInterval(interval);
