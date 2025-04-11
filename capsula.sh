@@ -28,6 +28,7 @@ sudo chmod 000 "$WEB_DIR/$COMPRIMIDO"
 
 #Obertura
 COMANDA_OBERTURA=$(chmod 777 $WEB_DIR/$COMPRIMIDO)
+#COMANDA_NOTI=$(curl -d "Hi" ntfy.sh/Push_Notifications_DMC)
 
 # Instal·lació AT si no esta instal·lat
 if ! command -v at &> /dev/null; then
@@ -39,7 +40,8 @@ if ! command -v at &> /dev/null; then
 fi
 
 # Programar obertura amb `at`
-sudo echo "$COMANDA_OBERTURA" | sudo at "$DATA_OBERTURA"
+echo "$COMANDA_OBERTURA" | sudo at "$DATA_OBERTURA"
+echo "curl -d 'Capsula Oberta' ntfs.sh/Push_Notifications_DMC" | at "$DATA_OBERTURA"
 
 # Crear pàgina HTML amb compte enrere
 cat <<EOF | sudo tee "$WEB_DIR/index.html" > /dev/null
