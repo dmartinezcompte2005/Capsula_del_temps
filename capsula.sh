@@ -13,18 +13,18 @@ BASENAME=$(basename "$ARXIUS")
 TIMESTAMP=$(date -d "$DATA_OBERTURA" +%s)
 NOW=$(date +%s)
 SECONDS_LEFT=$((TIMESTAMP - NOW))
-ARCHIVE="capsula.tar.gz"
+COMPRIMIDO="capsula.tar.gz"
 WEB_DIR="/var/www/html"
 
 # Comprimir el contingut
-tar -czf "$ARCHIVE" "$ARXIUS"
+tar -czf "$COMPRIMIDO" "$ARXIUS"
 
 # Moure l’arxiu i bloquejar-lo
-sudo mv "$ARCHIVE" "$WEB_DIR/"
-sudo chmod 000 "$WEB_DIR/$ARCHIVE"
+sudo mv "$COMPRIMIDO" "$WEB_DIR/"
+sudo chmod 000 "$WEB_DIR/$COMPRIMIDO"
 
 #Obertura
-COMANDA_OBERTURA=$(chmod 777 $WEB_DIR/$ARCHIVE)
+COMANDA_OBERTURA=$(chmod 777 $WEB_DIR/$COMPRIMIDO)
 
 # Instal·lació AT si no esta instal·lat
 if ! command -v at &> /dev/null; then
@@ -50,7 +50,7 @@ cat <<EOF | sudo tee "$WEB_DIR/index.html" > /dev/null
     <h1>$TITLE</h1>
     <p id="countdown"></p>
     <div id="link" style="display:none;">
-        <a href="$ARCHIVE" download>Descarrega la Càpsula del Temps</a>
+        <a href="$COMPRIMIDO" download>Descarrega la Càpsula del Temps</a>
     </div>
 
     <script>
