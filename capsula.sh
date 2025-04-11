@@ -8,13 +8,16 @@ read -p "Introdueix la ruta del fitxer o carpeta que vols guardar: " ARXIUS
 read -p "Introdueix la data d'obertura (format: YYYY-MM-DD HH:MM): " DATA_OBERTURA
 read -p "Introdueix un títol per a la pàgina web: " TITLE
 
+#CREACIÓ FITXER
+sudo mkdir /var/www/html/$TITLE
+
 # Preparar variables
 BASENAME=$(basename "$ARXIUS")
 TIMESTAMP=$(date -d "$DATA_OBERTURA" +%s)
 NOW=$(date +%s)
 SECONDS_LEFT=$((TIMESTAMP - NOW))
 COMPRIMIDO="capsula.tar.gz"
-WEB_DIR="/var/www/html"
+WEB_DIR="/var/www/html/$TITLE"
 
 # Comprimir el contingut
 tar -czf "$COMPRIMIDO" "$ARXIUS"
