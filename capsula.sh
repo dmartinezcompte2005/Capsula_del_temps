@@ -92,4 +92,4 @@ if ! command -v apache2 &> /dev/null; then
     sudo systemctl start apache2
 fi
 
-echo "✅ Càpsula creada! Visita http://localhost/ per veure el compte enrere."
+echo "Càpsula creada! Visita http://localhost/ per veure el compte enrere."
